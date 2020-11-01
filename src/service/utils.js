@@ -1,9 +1,16 @@
 'use strict';
 
+const chalk = require(`chalk`);
 const fs = require(`fs`);
 const util = require(`util`);
 const {EXIT_CODE} = require(`./constants`);
 const writeFile = util.promisify(fs.writeFile);
+
+const print = {
+  error: (text, customColor = `red`) => console.error(chalk[customColor](text)),
+  success: (text, customColor = `green`) => console.info(chalk[customColor](text)),
+  info: (text, customColor = `grey`) => console.info(chalk[customColor](text)),
+};
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -27,7 +34,7 @@ const getRandomSizedArray = (arr, minSize, maxSize) => {
 };
 
 const breakProcessWithError = (errorText) => {
-  console.error(errorText);
+  print.error(errorText);
   process.exit(EXIT_CODE.FAIL);
 };
 
@@ -38,7 +45,7 @@ const completeProcess = () => {
 const writeResultInFile = async (result, fileName) => {
   try {
     writeFile(fileName, result);
-    console.info(`Запись в файл завершилась успешно`);
+    print.success(`Запись в файл завершилась успешно`);
     completeProcess();
   } catch (e) {
     breakProcessWithError(`Ошибка записи в файл`);
@@ -58,6 +65,7 @@ const getDatetimeStr = (date) => {
 };
 
 module.exports = {
+  print,
   getRandomInt,
   shuffle,
   getRandomValueFromArray,
