@@ -1,7 +1,9 @@
 'use strict';
 
 const fs = require(`fs`);
+const util = require(`util`);
 const {EXIT_CODE} = require(`./constants`);
+const writeFile = util.promisify(fs.writeFile);
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -33,17 +35,14 @@ const completeProcess = () => {
   process.exit(EXIT_CODE.SUCCESS);
 };
 
-const writeResultInFile = (result, fileName) => {
-  const callback = (err) => {
-    if (err) {
-      breakProcessWithError(`Ошибка записи в файл`);
-      return;
-    }
+const writeResultInFile = async (result, fileName) => {
+  try {
+    writeFile(fileName, result);
     console.info(`Запись в файл завершилась успешно`);
     completeProcess();
-    return;
-  };
-  fs.writeFile(fileName, result, callback);
+  } catch (e) {
+    breakProcessWithError(`Ошибка записи в файл`);
+  }
 };
 
 const normalizeDatetimeComponent = (val) => `${val}`.length < 2 ? `0${val}` : `${val}`;
