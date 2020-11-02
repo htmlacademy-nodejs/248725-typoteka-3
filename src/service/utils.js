@@ -1,7 +1,16 @@
 'use strict';
 
+const chalk = require(`chalk`);
 const fs = require(`fs`);
+const util = require(`util`);
 const {EXIT_CODE} = require(`./constants`);
+const writeFile = util.promisify(fs.writeFile);
+
+const print = {
+  error: (text, customColor = `red`) => console.error(chalk[customColor](text)),
+  success: (text, customColor = `green`) => console.info(chalk[customColor](text)),
+  info: (text, customColor = `grey`) => console.info(chalk[customColor](text)),
+};
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -25,7 +34,7 @@ const getRandomSizedArray = (arr, minSize, maxSize) => {
 };
 
 const breakProcessWithError = (errorText) => {
-  console.error(errorText);
+  print.error(errorText);
   process.exit(EXIT_CODE.FAIL);
 };
 
@@ -33,17 +42,14 @@ const completeProcess = () => {
   process.exit(EXIT_CODE.SUCCESS);
 };
 
-const writeResultInFile = (result, fileName) => {
-  const callback = (err) => {
-    if (err) {
-      breakProcessWithError(`Ошибка записи в файл`);
-      return;
-    }
-    console.info(`Запись в файл завершилась успешно`);
+const writeResultInFile = async (result, fileName) => {
+  try {
+    writeFile(fileName, result);
+    print.success(`Запись в файл завершилась успешно`);
     completeProcess();
-    return;
-  };
-  fs.writeFile(fileName, result, callback);
+  } catch (e) {
+    breakProcessWithError(`Ошибка записи в файл`);
+  }
 };
 
 const normalizeDatetimeComponent = (val) => `${val}`.length < 2 ? `0${val}` : `${val}`;
@@ -59,6 +65,7 @@ const getDatetimeStr = (date) => {
 };
 
 module.exports = {
+  print,
   getRandomInt,
   shuffle,
   getRandomValueFromArray,
