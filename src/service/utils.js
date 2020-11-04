@@ -3,13 +3,14 @@
 const chalk = require(`chalk`);
 const fs = require(`fs`);
 const util = require(`util`);
-const {EXIT_CODE} = require(`./constants`);
+const {EXIT_CODE, COLOR} = require(`./constants`);
 const writeFile = util.promisify(fs.writeFile);
+const readFile = util.promisify(fs.readFile);
 
 const print = {
-  error: (text, customColor = `red`) => console.error(chalk[customColor](text)),
-  success: (text, customColor = `green`) => console.info(chalk[customColor](text)),
-  info: (text, customColor = `grey`) => console.info(chalk[customColor](text)),
+  error: (text, customColor = COLOR.RED) => console.error(chalk[customColor](text)),
+  success: (text, customColor = COLOR.GREEN) => console.info(chalk[customColor](text)),
+  info: (text, customColor = COLOR.GREY) => console.info(chalk[customColor](text)),
 };
 
 const getRandomInt = (min, max) => {
@@ -44,12 +45,22 @@ const completeProcess = () => {
 
 const writeResultInFile = async (result, fileName) => {
   try {
-    writeFile(fileName, result);
+    await writeFile(fileName, result);
     print.success(`Запись в файл завершилась успешно`);
     completeProcess();
   } catch (e) {
     breakProcessWithError(`Ошибка записи в файл`);
   }
+};
+
+const readDataFromFile = async (filePath) => {
+  let rawData = [];
+  try {
+    rawData = await readFile(filePath, `utf-8`);
+  } catch (e) {
+    breakProcessWithError(`Ошибка чтения файла`);
+  }
+  return rawData.trim().split(`\n`);
 };
 
 const normalizeDatetimeComponent = (val) => `${val}`.length < 2 ? `0${val}` : `${val}`;
@@ -74,4 +85,5 @@ module.exports = {
   completeProcess,
   writeResultInFile,
   getDatetimeStr,
+  readDataFromFile,
 };
