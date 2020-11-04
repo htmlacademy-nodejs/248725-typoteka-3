@@ -15,6 +15,12 @@ const EXIT_CODE = {
   FAIL: 1,
 };
 
+const COLOR = {
+  RED: `red`,
+  GREEN: `green`,
+  GREY: `grey`,
+  BLUE: `blue`,
+};
 
 const ANNOUNCE_SENTENCES_RANGE = {
   MIN: 1,
@@ -77,6 +83,7 @@ const CATEGORIES = [
 ];
 
 module.exports = {
+  COLOR,
   MS_IN_MONTH,
   COMMAND,
   CATEGORIES,
