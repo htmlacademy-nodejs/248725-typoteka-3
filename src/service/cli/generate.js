@@ -1,11 +1,9 @@
 'use strict';
 
+const path = require(`path`);
 const {
-  TITLES,
   ANNOUNCE_SENTENCES_RANGE,
   FULL_TEXT_SENTENCES_RANGE,
-  CATEGORIES,
-  SENTENCES,
   MS_IN_MONTH,
 } = require(`../constants`);
 
@@ -16,8 +14,14 @@ const {
   writeResultInFile,
   breakProcessWithError,
   getDatetimeStr,
+  readDataFromFile,
 } = require(`../utils`);
 
+const dataPath = {
+  titles: path.resolve(__dirname, `../../../data/titles.txt`),
+  categories: path.resolve(__dirname, `../../../data/categories.txt`),
+  sentences: path.resolve(__dirname, `../../../data/sentences.txt`),
+};
 const DEFAULT_ARTICLE_NUMBER = 1;
 const MAX_ARTICLE_NUMBER = 1000;
 const MAX_ARTICLE_LIMIT_ERROR = `Не больше ${MAX_ARTICLE_NUMBER} публикаций`;
@@ -32,17 +36,9 @@ const getArticleCreatedDate = () => {
   return getDatetimeStr(createdDate);
 };
 
-const createArticle = () => ({
-  title: getRandomValueFromArray(TITLES),
-  announce: getRandomSizedArray(SENTENCES, ANNOUNCE_SENTENCES_RANGE.MIN, ANNOUNCE_SENTENCES_RANGE.MAX),
-  fullText: getRandomSizedArray(SENTENCES, FULL_TEXT_SENTENCES_RANGE.MIN, FULL_TEXT_SENTENCES_RANGE.MAX),
-  createdDate: getArticleCreatedDate(),
-  category: getRandomSizedArray(CATEGORIES, 0, CATEGORIES.length - 1),
-});
-
 module.exports = {
   name: `--generate`,
-  run([adsNumber]) {
+  async run([adsNumber]) {
     const articlesNumberForCreation = Number(adsNumber) || DEFAULT_ARTICLE_NUMBER;
 
     if (articlesNumberForCreation > MAX_ARTICLE_NUMBER) {
@@ -50,7 +46,20 @@ module.exports = {
       return;
     }
 
-    const articles = new Array(articlesNumberForCreation).fill(null).map(() => createArticle());
+    const [titles, categories, sentences] = await Promise.all([
+      readDataFromFile(dataPath.titles),
+      readDataFromFile(dataPath.categories),
+      readDataFromFile(dataPath.sentences)
+    ]);
+
+    const articles = new Array(articlesNumberForCreation).fill(null).map(() => ({
+      title: getRandomValueFromArray(titles),
+      announce: getRandomSizedArray(sentences, ANNOUNCE_SENTENCES_RANGE.MIN, ANNOUNCE_SENTENCES_RANGE.MAX),
+      fullText: getRandomSizedArray(sentences, FULL_TEXT_SENTENCES_RANGE.MIN, FULL_TEXT_SENTENCES_RANGE.MAX),
+      createdDate: getArticleCreatedDate(),
+      category: getRandomSizedArray(categories, 0, categories.length - 1),
+    }));
+
     writeResultInFile(JSON.stringify(articles), FILE_NAME);
   }
 };
