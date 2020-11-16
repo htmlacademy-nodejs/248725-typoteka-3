@@ -27,7 +27,7 @@ const onClientConnect = async (request, response) => {
       try {
         const articlesJSON = await fsPromises.readFile(articlesPath, `utf-8`);
         const htmlBody = createArticlesHTMLList(JSON.parse(articlesJSON));
-        sendResponse(response, 200, htmlBody);
+        sendResponse(response, HTTP_CODE.OK, htmlBody);
       } catch (e) {
         sendResponse(response, HTTP_CODE.NOT_FOUND, NOT_FOUND_TEXT);
       }
