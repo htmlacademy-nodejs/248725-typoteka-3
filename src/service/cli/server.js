@@ -2,12 +2,11 @@
 
 const http = require(`http`);
 const path = require(`path`);
+const {StatusCodes, getReasonPhrase} = require(`http-status-codes`);
 const fsPromises = require(`fs`).promises;
 const {print, sendResponse} = require(`../utils`);
-const {HTTP_CODE} = require(`../constants`);
 
 const DEFAULT_PORT = 3000;
-const NOT_FOUND_TEXT = `Not found`;
 
 const createArticlesHTMLList = (articles) => {
   const listContent = articles
@@ -27,13 +26,13 @@ const onClientConnect = async (request, response) => {
       try {
         const articlesJSON = await fsPromises.readFile(articlesPath, `utf-8`);
         const htmlBody = createArticlesHTMLList(JSON.parse(articlesJSON));
-        sendResponse(response, HTTP_CODE.OK, htmlBody);
+        sendResponse(response, StatusCodes.OK, htmlBody);
       } catch (e) {
-        sendResponse(response, HTTP_CODE.NOT_FOUND, NOT_FOUND_TEXT);
+        sendResponse(response, StatusCodes.NOT_FOUND, getReasonPhrase(StatusCodes.NOT_FOUND));
       }
       break;
     default:
-      sendResponse(response, HTTP_CODE.NOT_FOUND, NOT_FOUND_TEXT);
+      sendResponse(response, StatusCodes.NOT_FOUND, getReasonPhrase(StatusCodes.NOT_FOUND));
       break;
   }
 };
