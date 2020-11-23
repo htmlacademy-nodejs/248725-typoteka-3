@@ -2,9 +2,10 @@
   "name": "248725-typoteka-3",
   "version": "1.0.0",
   "description": "Типотека",
-  "main": "./src/service/service.js",
+  "main": "src/service/index.js",
   "dependencies": {
-    "chalk": "4.1.0"
+    "chalk": "4.1.0",
+    "http-status-codes": "2.1.4"
   },
   "devDependencies": {
     "eslint": "7.12.0",
@@ -12,8 +13,8 @@
     "nodemon": "2.0.6"
   },
   "scripts": {
-    "start": "node ./src/service/service.js",
-    "server": "nodemon ./src/service/service.js --server",
+    "start": "node ./src/service",
+    "server": "nodemon ./src/service --server",
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/"
   },
