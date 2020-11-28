@@ -5,6 +5,7 @@
   "main": "src/service/index.js",
   "dependencies": {
     "chalk": "4.1.0",
+    "express": "4.17.1",
     "http-status-codes": "2.1.4"
   },
   "devDependencies": {
@@ -15,6 +16,7 @@
   "scripts": {
     "start": "node ./src/service",
     "server": "nodemon ./src/service --server",
+    "start-front-server": "nodemon ./src/express",
     "test": "npm run eslint",
     "eslint": "eslint --ext .js src/"
   },
