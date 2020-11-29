@@ -11,6 +11,9 @@ const searchRouter = require(`./routes/search`);
 const app = express();
 const port = 8000;
 
+app.set(`views`, `./templates`);
+app.set(`view engine`, `pug`);
+
 app.get(`/`, (req, res) => res.send(req.originalUrl));
 app.use(`/articles`, articlesRouter);
 app.use(`/login`, loginRouter);
