@@ -1,0 +1,123 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper
+      header.header
+        a.header__logo.logo(href='#')
+          img.logo__image(src='img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
+          span.logo__name Типотека
+        nav.header__nav
+          ul.header__nav-list
+            li.header__list-item
+              a.header__registration(href='#') Регистрация
+            li.header__list-item
+              a.header__enter(href='#') Вход с паролем
+        a.header__search.button.button--search(href='#' aria-label='поиск по сайту')
+
+      main.main-page
+        h1.visually-hidden Главная страница личного блога Типотека
+        p Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
+
+        section.main-page__theme-list
+          h2.visually-hidden Список тем
+          ul.themes
+            each theme in themeList
+              li.themes__item
+                a(
+                  class=(theme.withPadding ? 'themes__item-link themes__item-link--padding' : 'themes__item-link')
+                  href="#"
+                )= theme.name + ` `
+                  sup= theme.countNumber
+
+        div.main-page__section-flex
+          section.main-page__hot.hot
+            h2.hot__name= `Самое обсуждаемое `
+              span.hot__icon.hot__icon--fire
+            ul.hot__list
+              each hotItem, index in hotList
+                li(class={
+                  'hot__list-item': true,
+                  'hot__list-item--end': (hotList.length - 1) === index,
+                  'hot__list-item--margin': hotItem.withMargin,
+                })
+                  a.hot__list-link(href='#')= hotItem.content + ` `
+                    sup.hot__link-sup= hotItem.countNumber
+
+          section.main-page__last.last
+            h2.last__name= `Последние комментарии `
+              span.last__icon.last__icon--cloud
+            ul.last__list
+              each commentary, index in lastCommentariesList
+                li(class={
+                  'last__list-item': true,
+                  'last__list-item--end': (lastCommentariesList.length - 1) === index,
+                })
+                  img.last__list-image(
+                    src= commentary.img
+                    width='20'
+                    height='20'
+                    alt='Аватар пользователя'
+                  )
+                  b.last__list-name= commentary.author
+                  a.last__list-link(href='#')= commentary.linkText
+
+        section.main-page__list.preview
+          h2.visually-hidden Список превью статей
+          ul.preview__list
+            each preview in previewList
+              li(class=preview.imgInfo ? `preview__item`:`preview__item preview__item--noimage`)
+                ul.preview__breadcrumbs
+                  each breadcrumb in preview.breadcrumbs
+                    li.preview__breadcrumbs-item
+                      a.preview__breadcrumbs-link(href="#")= breadcrumb
+                if preview.imgInfo
+                  div.preview__background
+                    img.preview__background-image(
+                      src=`img/${preview.imgInfo.name}@1x.jpg`
+                      width="460"
+                      height="240"
+                      srcset=`img/${preview.imgInfo.name}@1x.jpg 1x, img/${preview.imgInfo.name}@2x.jpg 2x`
+                      alt=preview.imgInfo.alt
+                    )
+                time.preview__time(datetime=preview.datetime.value)= preview.datetime.readableValue
+                h3.preview__name
+                  a.preview__name-link(href="#")= preview.title
+                p.preview__text= preview.content
+                a.preview__comment(href="#")= `Комментарии `
+                  span.preview__cloud
+                  b.preview__comment-count= ` ` + preview.commentNumber
+
+        div.preview__toggle-wrapper
+          ul.preview__pagination.pagination
+            li
+              a(
+                href="#"
+                aria-label="Страница назад"
+                class={
+                  'pagination__button': true,
+                  'button': true,
+                  'button--backwards': true,
+                  'button--disabled': pagination.current === 1,
+                }
+              ) Назад
+            each page in pagination.range
+              li(class={
+                'pagination__item': true,
+                'pagination__item--active': page === pagination.current,
+              })
+                a(href="#")= page
+            li
+              a(
+                href="#"
+                aria-label="Страница назад"
+                class={
+                  'pagination__button': true,
+                  'button': true,
+                  'button--forward': true,
+                  'button--disabled': pagination.current === pagination.last,
+                }
+              ) Вперед
+
+      include common/footer.pug
