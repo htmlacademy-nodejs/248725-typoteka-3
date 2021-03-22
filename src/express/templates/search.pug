@@ -1,0 +1,29 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper.wrapper--nobackground
+      include common/admin-header.pug
+
+      main
+        section.search-page
+          div(class={
+            'search-page__wrapper': true,
+            'search-page__wrapper--empty': searchValue && !resultList,
+          })
+            h1 Поиск
+            div.search.search-page__form
+              form(action="#" method="get")
+                label
+                  input(type="text" name="search" placeholder="Что ищем?" value=searchValue)
+                button.search__button.button.button--transparent(type="submit") Найти
+              if resultList && searchValue
+                each result in resultList
+                  div.search__result
+                    time.search__date(datetime=result.datetime.value)= result.datetime.readableValue
+                    a.search__link !{result.content}
+            if searchValue && !resultList
+              p.search-page__empty Ничего не нашлось
+
+      include common/footer.pug
