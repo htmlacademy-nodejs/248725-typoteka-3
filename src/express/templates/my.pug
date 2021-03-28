@@ -1,0 +1,24 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper.wrapper--nobackground
+      include common/admin-header.pug
+
+      main.main-page.main-page--padding
+        section.main-page__notes.notes
+          h1.notes__title Мои записи
+          ul.notes__list
+            each noteItem, index in notes
+              li(class={
+                'notes__list-item': true,
+                'notes__list-item--last': (notes.length - 1) === index,
+              })
+                time.notes__item-time(datatime=noteItem.datetime.value)= noteItem.datetime.readableValue
+                a.notes__item-text(href='#')= noteItem.content
+                btn.notes__button.button.button--close-item(type='button')
+                  span.visually-hidden Закрыть строку списка
+
+      include common/footer.pug
+      include common/scripts.pug
