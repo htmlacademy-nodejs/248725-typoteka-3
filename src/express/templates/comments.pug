@@ -1,0 +1,28 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper.wrapper--nobackground
+      include common/admin-header.pug
+
+      main.main-page.main-page--padding
+        section.main-page__publication.publication
+          h1.publication__title Комментарии
+          ul.publication__list
+            each publicationItem, index in publications
+              li(class={
+                'publication__list-item': true,
+                'publication__list-item--last': (publications.length - 1) === index,
+              })
+                div.publication__header
+                  img.publication__list-image(src=`/img/${publicationItem.avatar}` width="20" height="20" alt="Аватар пользователя")
+                  b.publication__list-name= publicationItem.author
+                  time.publication__item-time(datatime=publicationItem.datetime.value)= publicationItem.datetime.readableValue
+                a.publication__item-text(href='#')= publicationItem.news
+                p.publication__text-strong= publicationItem.comment
+                btn.publication__button.button.button--close-item(type='button')
+                  span.visually-hidden Закрыть строку списка
+
+      include common/footer.pug
+      include common/scripts.pug
