@@ -1,0 +1,30 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper.wrapper--nobackground
+      include common/admin-header.pug
+
+      main.main-page.main-page--padding
+        section.main-page__category.category
+          h1.category__title Категории
+          div.category__add-form
+            form(action="#" method="POST")
+              input#add-form-add-category(type="text" name="add-category" placeholder="Новая категория")
+              label(for="add-form-add-category")
+                span.visually-hidden Добавить категорию
+              button.category__button.button.button--category(type="submit") Добавить
+
+          ul.category__list
+            each category, index in categoryList
+              li.category__list-item
+                form(action="#" method="POST")
+                  input(type="text" name=`category-${index + 1}` id=`modify-form-category-${index + 1}` value=category)
+                  label(for=`modify-form-category-${index + 1}`)
+                    span.visually-hidden Редактировать категорию
+                  button.category__button.button.button--category(type="submit") Сохранить
+                  button.category__button.button.button--category(type="button") Удалить
+
+      include common/footer.pug
+      include common/scripts.pug
