@@ -1,0 +1,13 @@
+header.header
+  a.header__logo.logo(href='#')
+    img.logo__image(src='/img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
+    span.logo__name Типотека
+  button.button.button--colored.header__button-new Новая запись
+  div.header__dropdown
+    a.button.button--burger.header__burger(href='#') Открыть меню
+    ul.navigation.header__navigation
+      - var menuItemsNumber = [1, 2, 3, 4];
+      each item in menuItemsNumber
+        li.navigation__item
+          a(href='main.html') Пункт меню
+  a.header__search.button.button--search(href='#' aria-label='поиск по сайту')

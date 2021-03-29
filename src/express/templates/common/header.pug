@@ -1,0 +1,18 @@
+-
+  var navItems = [
+    { elementName: 'registration', linkText: 'Регистрация' },
+    { elementName: 'enter', linkText: 'Вход с паролем' }
+  ]
+
+
+header.header
+  a.header__logo.logo(href='#')
+    img.logo__image(src='img/icons/logo-image-only.svg' alt='логотип Тайпотеки')
+    span.logo__name Типотека
+  nav.header__nav
+    ul.header__nav-list
+      li
+      each item in navItems
+        li.header__list-item
+          a(class=`header__${item.elementName}` href='#')= item.linkText
+  a.header__search.button.button--search(href='#' aria-label='поиск по сайту')
