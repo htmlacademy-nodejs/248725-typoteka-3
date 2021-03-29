@@ -15,7 +15,7 @@ ul.preview__list
             src=`img/${preview.imgInfo.name}@1x.jpg`
             width="460"
             height="240"
-            srcset=`img/${preview.imgInfo.name}@1x.jpg 1x, img/${preview.imgInfo.name}@2x.jpg 2x`
+            srcset=`/img/${preview.imgInfo.name}@1x.jpg 1x, img/${preview.imgInfo.name}@2x.jpg 2x`
             alt=preview.imgInfo.alt
           )
       time.preview__time(datetime=preview.datetime.value)= preview.datetime.readableValue
