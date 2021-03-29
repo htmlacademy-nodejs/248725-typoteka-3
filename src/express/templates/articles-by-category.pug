@@ -1,0 +1,18 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper
+      include common/header.pug
+
+      main.articles-category
+        h1= selectedCategory
+
+        section.articles-category__theme-list
+          include common/themes.pug
+
+        section.articles-category__list.preview
+          include common/articles-preview.pug
+
+      include common/footer.pug

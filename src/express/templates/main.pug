@@ -1,0 +1,82 @@
+doctype html
+html(lang='ru')
+  include common/head.pug
+
+  body
+    div.wrapper
+      include common/header.pug
+
+      main.main-page
+        h1.visually-hidden Главная страница личного блога Типотека
+        p Это приветственный текст, который владелец блога может выбрать, чтобы описать себя 👏
+
+        section.main-page__theme-list
+          include common/themes.pug
+
+        div.main-page__section-flex
+          section.main-page__hot.hot
+            h2.hot__name= `Самое обсуждаемое `
+              span.hot__icon.hot__icon--fire
+            ul.hot__list
+              each hotItem, index in hotList
+                li(class={
+                  'hot__list-item': true,
+                  'hot__list-item--end': (hotList.length - 1) === index,
+                  'hot__list-item--margin': hotItem.withMargin,
+                })
+                  a.hot__list-link(href='#')= hotItem.content + ` `
+                    sup.hot__link-sup= hotItem.countNumber
+
+          section.main-page__last.last
+            h2.last__name= `Последние комментарии `
+              span.last__icon.last__icon--cloud
+            ul.last__list
+              each commentary, index in lastCommentariesList
+                li(class={
+                  'last__list-item': true,
+                  'last__list-item--end': (lastCommentariesList.length - 1) === index,
+                })
+                  img.last__list-image(
+                    src= commentary.img
+                    width='20'
+                    height='20'
+                    alt='Аватар пользователя'
+                  )
+                  b.last__list-name= commentary.author
+                  a.last__list-link(href='#')= commentary.linkText
+
+        section.main-page__list.preview
+          include common/articles-preview.pug
+
+        div.preview__toggle-wrapper
+          ul.preview__pagination.pagination
+            li
+              a(
+                href="#"
+                aria-label="Страница назад"
+                class={
+                  'pagination__button': true,
+                  'button': true,
+                  'button--backwards': true,
+                  'button--disabled': pagination.current === 1,
+                }
+              ) Назад
+            each page in pagination.range
+              li(class={
+                'pagination__item': true,
+                'pagination__item--active': page === pagination.current,
+              })
+                a(href="#")= page
+            li
+              a(
+                href="#"
+                aria-label="Страница назад"
+                class={
+                  'pagination__button': true,
+                  'button': true,
+                  'button--forward': true,
+                  'button--disabled': pagination.current === pagination.last,
+                }
+              ) Вперед
+
+      include common/footer.pug

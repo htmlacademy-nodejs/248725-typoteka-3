@@ -1,0 +1,13 @@
+h2.visually-hidden Список тем
+ul.themes
+  each theme in themeList
+    li.themes__item
+      a(
+        class={
+          'themes__item-link--active': theme.isActive,
+          'themes__item-link--padding': theme.withPadding,
+          'themes__item-link': true,
+        }
+        href="#"
+      )= theme.name + ` `
+        sup= theme.countNumber
