@@ -6,6 +6,7 @@ const {
   ANNOUNCE_SENTENCES_RANGE,
   FULL_TEXT_SENTENCES_RANGE,
   MS_IN_MONTH,
+  ID_LENGTH,
 } = require(`../constants`);
 
 const {
@@ -44,7 +45,7 @@ const createRandomComment = (comments) => {
   const commentsText = shuffle(comments).slice(0, getRandomInt(1, maxSize)).join(` `);
   return {
     text: commentsText,
-    id: nanoid(6),
+    id: nanoid(ID_LENGTH),
   };
 };
 
@@ -71,7 +72,7 @@ module.exports = {
     ]);
 
     const articles = new Array(articlesNumberForCreation).fill(null).map(() => ({
-      id: nanoid(6),
+      id: nanoid(ID_LENGTH),
       title: getRandomValueFromArray(titles),
       announce: getRandomSizedArray(sentences, ANNOUNCE_SENTENCES_RANGE.MIN, ANNOUNCE_SENTENCES_RANGE.MAX),
       fullText: getRandomSizedArray(sentences, FULL_TEXT_SENTENCES_RANGE.MIN, FULL_TEXT_SENTENCES_RANGE.MAX),
