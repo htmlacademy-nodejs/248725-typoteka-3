@@ -1,7 +1,7 @@
 # Личный проект «Типотека» [![Build status][travis-image]][travis-url]
 
 * Студент: [Ильназ Акпамбеков](https://up.htmlacademy.ru/nodejs/3/user/248725).
-* Наставник: [Дмитрий Мирошниченко](https://htmlacademy.ru/profile/id591417).
+* Наставник: [Ruslan Malogulko](https://htmlacademy.ru/profile/id9728).
 
 ---
 

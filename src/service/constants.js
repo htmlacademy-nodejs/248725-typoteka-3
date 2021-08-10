@@ -1,6 +1,7 @@
 'use strict';
 
 const USER_ARGV_INDEX = 2;
+const ID_LENGTH = 6;
 
 const MS_IN_MONTH = 2629746000;
 
@@ -40,4 +41,5 @@ module.exports = {
   USER_ARGV_INDEX,
   ANNOUNCE_SENTENCES_RANGE,
   FULL_TEXT_SENTENCES_RANGE,
+  ID_LENGTH,
 };
