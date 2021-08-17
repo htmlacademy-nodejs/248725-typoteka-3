@@ -8,9 +8,9 @@ module.exports = (keysList) => (req, res, next) => {
   const keysExists = keysList.every((key) => keys.includes(key));
 
   if (!keysExists) {
-    res.status(StatusCodes.BAD_REQUEST)
+    return res.status(StatusCodes.BAD_REQUEST)
       .send(ReasonPhrases.BAD_REQUEST);
   }
 
-  next();
+  return next();
 };
