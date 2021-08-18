@@ -1,17 +1,12 @@
 'use strict';
 
-const chalk = require(`chalk`);
+const {getLogger} = require(`./lib`);
 const fs = require(`fs`);
 const util = require(`util`);
-const {EXIT_CODE, COLOR} = require(`./constants`);
+const {EXIT_CODE, SERVICE_LOGGER_NAME} = require(`./constants`);
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
-
-const print = {
-  error: (text, customColor = COLOR.RED) => console.error(chalk[customColor](text)),
-  success: (text, customColor = COLOR.GREEN) => console.info(chalk[customColor](text)),
-  info: (text, customColor = COLOR.GREY) => console.info(chalk[customColor](text)),
-};
+const logger = getLogger({name: SERVICE_LOGGER_NAME});
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -35,7 +30,7 @@ const getRandomSizedArray = (arr, minSize, maxSize) => {
 };
 
 const breakProcessWithError = (errorText) => {
-  print.error(errorText);
+  logger.error(errorText);
   process.exit(EXIT_CODE.FAIL);
 };
 
@@ -46,7 +41,7 @@ const completeProcess = () => {
 const writeResultInFile = async (result, fileName) => {
   try {
     await writeFile(fileName, result);
-    print.success(`Запись в файл завершилась успешно`);
+    logger.info(`Запись в файл завершилась успешно`);
     completeProcess();
   } catch (e) {
     breakProcessWithError(`Ошибка записи в файл`);
@@ -94,7 +89,6 @@ const sendResponse = (res, statusCode, message) => {
 };
 
 module.exports = {
-  print,
   getRandomInt,
   shuffle,
   getRandomValueFromArray,
