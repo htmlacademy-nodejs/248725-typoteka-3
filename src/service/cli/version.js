@@ -1,13 +1,14 @@
 'use strict';
 
-const {COLOR} = require(`../constants`);
-const {print} = require(`../utils`);
+const {getLogger} = require(`../lib`);
+const {SERVICE_LOGGER_NAME} = require(`../constants`);
 const packageJsonFile = require(`../../../package.json`);
+const logger = getLogger({name: SERVICE_LOGGER_NAME});
 
 module.exports = {
   name: `--version`,
   run() {
     const version = packageJsonFile.version;
-    print.info(version, COLOR.BLUE);
+    logger.info(version);
   }
 };

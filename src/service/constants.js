@@ -16,13 +16,6 @@ const EXIT_CODE = {
   FAIL: 1,
 };
 
-const COLOR = {
-  RED: `red`,
-  GREEN: `green`,
-  GREY: `grey`,
-  BLUE: `blue`,
-};
-
 const ANNOUNCE_SENTENCES_RANGE = {
   MIN: 1,
   MAX: 5,
@@ -33,8 +26,16 @@ const FULL_TEXT_SENTENCES_RANGE = {
   MAX: 20,
 };
 
+const SERVICE_LOGGER_NAME = `service`;
+
+const ENV = {
+  DEVELOPMENT: `development`,
+  PRODUCTION: `production`
+};
+
 module.exports = {
-  COLOR,
+  ENV,
+  SERVICE_LOGGER_NAME,
   MS_IN_MONTH,
   COMMAND,
   EXIT_CODE,

@@ -22,7 +22,7 @@ module.exports = (app, articlesService, commentsService) => {
     res.status(StatusCodes.CREATED).json(newArticle);
   });
 
-  route.get(`/:articleId`, async (req, res) => {
+  route.get(`/:articleId`, articleExist(articlesService), async (req, res) => {
     const articleId = req.params.articleId;
     const article = await articlesService.findOne(articleId);
     res.status(StatusCodes.OK).json(article);

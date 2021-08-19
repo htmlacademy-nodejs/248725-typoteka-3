@@ -2,11 +2,14 @@
 
 const {promises: fsPromises} = require(`fs`);
 const path = require(`path`);
+const {getLogger} = require(`./logger`);
+const {SERVICE_LOGGER_NAME} = require(`../constants`);
+const logger = getLogger({name: SERVICE_LOGGER_NAME});
 let data = null;
 
 const getMockData = async () => {
   if (data !== null) {
-    return Promise.resolve(data);
+    return data;
   }
 
   try {
@@ -14,11 +17,11 @@ const getMockData = async () => {
     const fileContent = await fsPromises.readFile(mockPath);
     data = JSON.parse(fileContent);
   } catch (err) {
-    console.error(err);
-    return Promise.reject(err);
+    logger.error(`An error occurred while trying to read mock data file: ${err.message}`);
+    throw err;
   }
 
-  return Promise.resolve(data);
+  return data;
 };
 
 module.exports = getMockData;
