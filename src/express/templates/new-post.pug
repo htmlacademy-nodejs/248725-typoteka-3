@@ -10,7 +10,7 @@ html(lang='ru')
         section
           div.popup.popup--new-publication.popup--anti
             div.new-publication
-              form(action="#" method="POST")
+              form(action="/articles/add" method="POST" enctype="multipart/form-data")
                 div.new-publication__header
                   h1 Новая публикация
                   div.new-publication__date-form
@@ -18,7 +18,7 @@ html(lang='ru')
                     div.new-publication__date-form-division
                       div.new-publication__date-block
                         label(for="new-publication-date" aria-label="Календарь")
-                        input(type="text" name="date" id="new-publication-date" placeholder="2019-03-21")
+                        input(type="text" name="date" id="new-publication-date" placeholder="2019-03-21" value=createdDate)
                   button.new-publication__button.button.button--colored(type="submit") Опубликовать
 
                 a.popup__button.button.button--popup-close(aria-label="Закрыть окно") Закрыть окно
@@ -26,7 +26,7 @@ html(lang='ru')
                   div.form__wrapper.form__wrapper--intro
                     div.form__field
                       label
-                        input(type="text" name="title" placeholder="Заголовок" required)
+                        input(type="text" name="title" placeholder="Заголовок" value=title required)
                     div.form__field.form__field--post-image
                       label
                         input(id="image-name-field" type="text" name="photo" placeholder="Фотография" readonly)
@@ -34,17 +34,26 @@ html(lang='ru')
                         label
                           input.visually-hidden(type="file" name="upload")
                           | Обзор
+
                     div.new-publication__category-wrapper
+                      each category, index in categories
+                        div.new-publication__checkbox
+                          input(
+                            type="checkbox"
+                            name=`category-${index}`
+                            id="new-publication__checkbox--auto"
+                          )
+                          label(for="checkbox-auto")= category
                       a.new-publication__form-link.button.button--transparent(href="#")
                         | Добавить категорию
 
                   div.form__wrapper.form__wrapper--text
                     div.form__field.form__field--publication-text
                       label
-                        textarea(rows="5" name="announcement" placeholder="Анонс публикации")
+                        textarea(rows="5" name="announcement" placeholder="Анонс публикации")= announcement
                     div.form__field.form__field--publication-text
                       label
-                        textarea(rows="5" name="full-text" placeholder="Полный текст публикации")
+                        textarea(rows="5" name="full-text" placeholder="Полный текст публикации")= fullText
 
       include common/footer.pug
       include common/scripts.pug
