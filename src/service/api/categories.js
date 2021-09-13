@@ -12,4 +12,9 @@ module.exports = (app, service) => {
     const categories = await service.findAll();
     res.status(StatusCodes.OK).json(categories);
   });
+
+  route.get(`/stats`, async (req, res) => {
+    const categoriesWithStats = await service.findAllWithStats();
+    res.status(StatusCodes.OK).json(categoriesWithStats);
+  });
 };
