@@ -22,10 +22,9 @@ html(lang='ru')
                 li(class={
                   'hot__list-item': true,
                   'hot__list-item--end': (hotList.length - 1) === index,
-                  'hot__list-item--margin': hotItem.withMargin,
                 })
-                  a.hot__list-link(href='#')= hotItem.content + ` `
-                    sup.hot__link-sup= hotItem.countNumber
+                  a.hot__list-link(href='#')= hotItem.title + ` `
+                    sup.hot__link-sup= hotItem.commentsNumber
 
           section.main-page__last.last
             h2.last__name= `Последние комментарии `

@@ -14,7 +14,7 @@ html(lang='ru')
           })
             h1 Поиск
             div.search.search-page__form
-              form(action="#" method="get")
+              form(action="/search" method="POST" enctype="multipart/form-data")
                 label
                   input(type="text" name="search" placeholder="Что ищем?" value=searchValue)
                 button.search__button.button.button--transparent(type="submit") Найти

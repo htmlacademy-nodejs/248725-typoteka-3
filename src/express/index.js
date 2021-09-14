@@ -10,36 +10,20 @@ const registerRouter = require(`./routes/register`);
 const searchRouter = require(`./routes/search`);
 const clientErrorPageRouter = require(`./routes/400`);
 const serverErrorPageRouter = require(`./routes/500`);
-const {createPaginationRange} = require(`./utils`);
-const {
-  themeList,
-  hotList,
-  lastCommentariesList,
-  previewList,
-} = require(`./models`);
+const mainPageRouter = require(`./routes/main`);
 
 const app = express();
 const port = 8000;
 
 const PUBLIC_DIR = `public`;
+const UPLOAD_DIR = `upload`;
+
 app.use(express.static(path.resolve(__dirname, PUBLIC_DIR)));
+app.use(express.static(path.resolve(__dirname, UPLOAD_DIR)));
 app.set(`views`, path.resolve(__dirname, `./templates`));
 app.set(`view engine`, `pug`);
 
-app.get(`/`, (req, res) => {
-  const paginationRange = createPaginationRange(1, 5);
-  res.render(`main`, {
-    themeList,
-    hotList,
-    lastCommentariesList,
-    previewList,
-    pagination: {
-      current: 1,
-      last: 5,
-      range: paginationRange,
-    }
-  });
-});
+app.get(`/`, mainPageRouter);
 app.use(`/articles`, articlesRouter);
 app.use(`/login`, loginRouter);
 app.use(`/categories`, categoriesRouter);

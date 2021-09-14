@@ -2,14 +2,23 @@
 
 class CategoriesService {
   constructor(articles) {
-    this._categories = articles.reduce((acc, item) => {
-      item.category.forEach((category) => acc.add(category));
+    const categoriesReducer = (acc, item) => {
+      item.category.forEach((category) => {
+        const numberOfUsage = acc[category] || 0;
+        acc[category] = numberOfUsage + 1;
+      });
       return acc;
-    }, new Set());
+    };
+
+    this._categories = articles.reduce(categoriesReducer, {});
   }
 
   findAll() {
-    return Array.from(this._categories);
+    return Object.keys(this._categories);
+  }
+
+  findAllWithStats() {
+    return this._categories;
   }
 }
 
