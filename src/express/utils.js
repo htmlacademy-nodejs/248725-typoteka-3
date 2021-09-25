@@ -1,6 +1,6 @@
 'use strict';
 
-const {format} = require(`date-fns`);
+const {format, parse} = require(`date-fns`);
 
 const createPaginationRange = (currentPage, pagesLimit, lastPage) => {
   const delta = Math.floor(pagesLimit / 2);
@@ -28,9 +28,7 @@ const markSearchingWord = (text, word) => {
 };
 
 const transformDateToReadableFormat = (dateString) => {
-  // формат строки приходит в виде `2021-06-22 19:32:45`
-  const isoDate = dateString.replace(` `, `T`);
-  const date = new Date(isoDate);
+  const date = parse(dateString, `yyyy-MM-dd HH:mm:ss`, new Date());
   return format(date, `dd.MM.yyyy', 'HH:mm`);
 };
 
