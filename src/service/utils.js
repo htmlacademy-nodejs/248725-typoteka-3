@@ -3,7 +3,12 @@
 const {getLogger} = require(`./lib`);
 const fs = require(`fs`);
 const util = require(`util`);
-const {EXIT_CODE, SERVICE_LOGGER_NAME} = require(`./constants`);
+const {
+  EXIT_CODE,
+  SERVICE_LOGGER_NAME,
+  MS_IN_MONTH
+} = require(`./constants`);
+
 const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 const logger = getLogger({name: SERVICE_LOGGER_NAME});
@@ -88,6 +93,19 @@ const sendResponse = (res, statusCode, message) => {
   res.end(template);
 };
 
+const createDate = () => {
+  const endDate = Date.now();
+  const TIME_RANGE_IN_MONTHS = 3;
+  const timeRangeInMs = MS_IN_MONTH * TIME_RANGE_IN_MONTHS;
+  const startDate = endDate - timeRangeInMs;
+  const createdDate = new Date(getRandomInt(startDate, endDate));
+  return getDatetimeStr(createdDate);
+};
+
+const getUniqueValues = (arr) => arr.filter(
+    (value, index, self) => self.indexOf(value) === index
+);
+
 module.exports = {
   getRandomInt,
   shuffle,
@@ -99,4 +117,6 @@ module.exports = {
   getDatetimeStr,
   readDataFromFile,
   sendResponse,
+  getUniqueValues,
+  createDate,
 };
