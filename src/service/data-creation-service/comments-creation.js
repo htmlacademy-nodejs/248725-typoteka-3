@@ -3,6 +3,8 @@
 const {nanoid} = require(`nanoid`);
 const {shuffle, getRandomInt, createDate} = require(`../utils`);
 
+const COMMENT_ID_LENGTH = 6;
+
 class CommentsCreationService {
   constructor({
     commentList,
@@ -14,7 +16,6 @@ class CommentsCreationService {
   }
 
   createRandomComment(comments) {
-    const COMMENT_ID_LENGTH = 6;
     const maxSize = comments.length;
     const commentsText = shuffle(comments).slice(0, getRandomInt(1, maxSize)).join(` `);
     return {
