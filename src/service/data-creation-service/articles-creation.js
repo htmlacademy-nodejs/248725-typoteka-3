@@ -8,6 +8,12 @@ const {
 } = require(`../utils`);
 const CommentsCreationService = require(`./comments-creation`);
 
+const ARTICLE_ID_LENGTH = 6;
+const MIN_ANNOUNCE_SENTENCES_RANGE = 1;
+const MAX_ANNOUNCE_SENTENCES_RANGE = 5;
+const MIN_FULL_TEXT_SENTENCES_RANGE = 1;
+const MAX_FULL_TEXT_SENTENCES_RANGE = 20;
+
 class ArticlesCreationService {
   constructor({
     articlesNumberForCreation,
@@ -16,8 +22,6 @@ class ArticlesCreationService {
     sentences,
     comments,
   }) {
-    const ARTICLE_ID_LENGTH = 6;
-
     this.articles = new Array(articlesNumberForCreation).fill(null).map(() => ({
       id: nanoid(ARTICLE_ID_LENGTH),
       title: this.createTitle(titles),
@@ -34,14 +38,10 @@ class ArticlesCreationService {
   }
 
   createAnnounce(sentences) {
-    const MIN_ANNOUNCE_SENTENCES_RANGE = 1;
-    const MAX_ANNOUNCE_SENTENCES_RANGE = 5;
     return getRandomSizedArray(sentences, MIN_ANNOUNCE_SENTENCES_RANGE, MAX_ANNOUNCE_SENTENCES_RANGE);
   }
 
   createFullText(sentences) {
-    const MIN_FULL_TEXT_SENTENCES_RANGE = 1;
-    const MAX_FULL_TEXT_SENTENCES_RANGE = 20;
     return getRandomSizedArray(sentences, MIN_FULL_TEXT_SENTENCES_RANGE, MAX_FULL_TEXT_SENTENCES_RANGE);
   }
 
