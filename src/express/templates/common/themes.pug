@@ -1,12 +1,12 @@
 h2.visually-hidden Список тем
 ul.themes
-  each theme in themeList
+  each category in categoryList
     li.themes__item
       a(
         class={
-          'themes__item-link--active': theme.isActive,
+          'themes__item-link--active': category.isActive,
           'themes__item-link': true,
         }
         href="#"
-      )= theme.name + ` `
-        sup= theme.countNumber
+      )= category.name + ` `
+        sup= category.number

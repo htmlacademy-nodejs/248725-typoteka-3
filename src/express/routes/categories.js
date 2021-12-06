@@ -1,12 +1,14 @@
 'use strict';
 
-const {categoryList} = require(`../models`);
 const {Router} = require(`express`);
 const categoriesRouter = new Router();
+const {serviceAPI} = require(`../api`);
 
-categoriesRouter.get(`/`, (req, res) =>
+categoriesRouter.get(`/`, async (req, res) => {
+  const categories = await serviceAPI.getCategories();
   res.render(`all-categories`, {
-    categoryList,
-  }));
+    categoryList: categories,
+  });
+});
 
 module.exports = categoriesRouter;

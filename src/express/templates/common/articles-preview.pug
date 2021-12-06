@@ -3,20 +3,20 @@ ul.preview__list
   each article in articles
     li(class={
       'preview__item': true,
-      'preview__item--noimage': !article.imgInfo,
+      'preview__item--noimage': !article.picture,
     })
       ul.preview__breadcrumbs
         each category in article.categories
           li.preview__breadcrumbs-item
-            a.preview__breadcrumbs-link(href="#")= category
+            a.preview__breadcrumbs-link(href="#")= category.name
       if article.imgInfo
         div.preview__background
           img.preview__background-image(
-            src=`img/${article.imgInfo.name}@1x.jpg`
+            src=`img/${article.picture}@1x.jpg`
             width="460"
             height="240"
-            srcset=`/img/${article.imgInfo.name}@1x.jpg 1x, img/${article.imgInfo.name}@2x.jpg 2x`
-            alt=article.imgInfo.alt
+            srcset=`/img/${article.picture}@1x.jpg 1x, img/${article.picture}@2x.jpg 2x`
+            alt=article.picture
           )
       time.preview__time(datetime=article.datetime.value)= article.datetime.readableValue
       h3.preview__name
