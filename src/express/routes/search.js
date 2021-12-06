@@ -10,8 +10,8 @@ const searchRouter = new Router();
 
 const transformSearchResultForPageView = (article) => ({
   datetime: {
-    value: article.createdDate,
-    readableValue: transformDateToReadableFormat(article.createdDate),
+    value: article.createdAt,
+    readableValue: transformDateToReadableFormat(article.createdAt),
   },
   content: article.title,
 });

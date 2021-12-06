@@ -1,35 +1,68 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LENGTH} = require(`../constants`);
+const alias = require(`../models/alias`);
+const {Sequelize} = require(`sequelize`);
 
-class CommentsService {
-  create(article, articlesService, comment) {
-    const newComment = Object.assign({id: nanoid(ID_LENGTH)}, comment);
-    article.comments.push(newComment);
-    articlesService.update(article.id, article);
-    return newComment;
+class CommentService {
+  constructor(sequelize) {
+    this._Comment = sequelize.models.Comment;
   }
 
-  drop(article, articlesService, commentId) {
-    const comment = article.comments.find((item) => item.id === commentId);
-
-    if (!comment) {
-      return null;
-    }
-
-    article.comments = article.comments.filter((item) => item.id !== commentId);
-    articlesService.update(article.id, article);
-    return comment;
+  async create(articleId, comment) {
+    return this._Comment.create({
+      articleId,
+      ...comment
+    });
   }
 
-  findOne(article, commentId) {
-    return article.comments.find((item) => item.id === commentId);
+  async drop(id) {
+    const deletedRows = this._Comment.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
   }
 
-  findAll(article) {
-    return article.comments;
+  findAll(articleId) {
+    return this._Comment.findAll({
+      where: {'article_id': articleId},
+      include: [
+        {
+          association: alias.USERS,
+          attributes: [
+            [Sequelize.fn(`CONCAT`, Sequelize.col(`last_name`), ` `, Sequelize.col(`first_name`)), `name`],
+            `avatar`
+          ],
+        },
+        {
+          association: alias.ARTICLES,
+          attributes: [`title`],
+        },
+      ],
+      raw: true
+    });
+  }
+
+  findLast(limit) {
+    return this._Comment.findAll({
+      raw: true,
+      limit,
+      order: [[`createdAt`, `DESC`]],
+      include: {
+        association: alias.USERS,
+        attributes: [
+          [Sequelize.fn(`CONCAT`, this.sequelize.col(`last_name`), ` `, Sequelize.col(`first_name`)), `name`],
+          `avatar`
+        ],
+      }
+    });
+  }
+
+  findOne(articleId, commentId) {
+    return this._Comment.findAll({
+      where: {articleId, id: commentId},
+      raw: true
+    });
   }
 }
 
-module.exports = CommentsService;
+module.exports = CommentService;

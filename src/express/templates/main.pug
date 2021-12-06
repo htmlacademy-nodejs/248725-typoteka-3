@@ -36,13 +36,13 @@ html(lang='ru')
                   'last__list-item--end': (lastCommentariesList.length - 1) === index,
                 })
                   img.last__list-image(
-                    src= commentary.img
+                    src= commentary[`users.avatar`]
                     width='20'
                     height='20'
                     alt='Аватар пользователя'
                   )
-                  b.last__list-name= commentary.author
-                  a.last__list-link(href='#')= commentary.linkText
+                  b.last__list-name= commentary[`users.name`]
+                  a.last__list-link(href='#')= commentary.text
 
         section.main-page__list.preview
           include common/articles-preview.pug

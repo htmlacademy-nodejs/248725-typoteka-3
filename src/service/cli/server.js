@@ -17,6 +17,7 @@ module.exports = {
     try {
       logger.info(`Trying to connect to database...`);
       await sequelize.authenticate();
+      await sequelize.sync();
       logger.info(`Connection to database established`);
     } catch (e) {
       logger.error(`Connection to database failed`);

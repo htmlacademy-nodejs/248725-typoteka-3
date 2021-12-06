@@ -5,23 +5,13 @@ const {serviceAPI} = require(`../api`);
 const {transformDateToReadableFormat} = require(`../utils`);
 const myRouter = new Router();
 
-const template = {
-  avatar: `avatar-small-2.png`,
-  author: `Александр Петров`,
-  news: `Главреды «Дождя», Forbes и других СМИ попросили Роскомнадзор разъяснить штрафы за ссылки на сайты.`,
-  datetime: {
-    value: `2019-03-21T20:33`,
-    readableValue: `21.03.2019, 20:33`,
-  }
-};
-
 myRouter.get(`/`, async (req, res) => {
   const articles = await serviceAPI.getArticles();
-  const dataForRender = articles.map(({title, createdDate}) => ({
+  const dataForRender = articles.map(({title, createdAt}) => ({
     content: title,
     datetime: {
-      value: createdDate,
-      readableValue: transformDateToReadableFormat(createdDate),
+      value: createdAt,
+      readableValue: transformDateToReadableFormat(createdAt),
     }
   }));
 
@@ -31,10 +21,17 @@ myRouter.get(`/`, async (req, res) => {
 });
 
 myRouter.get(`/comments`, async (req, res) => {
-  const comments = await serviceAPI.getComments(`4DpniN`);
-  const dataForRender = comments.map(({text}) => ({
-    ...template,
-    comment: text,
+  const comments = await serviceAPI.getComments(1);
+  console.log(comments);
+  const dataForRender = comments.map((comment) => ({
+    avatar: comment[`users.avatar`],
+    author: comment[`users.name`],
+    news: comment[`articles.title`],
+    datetime: {
+      value: comment.createdAt,
+      readableValue: transformDateToReadableFormat(comment.createdAt),
+    },
+    comment: comment.text,
   }));
 
   res.render(`comments`, {

@@ -20,7 +20,7 @@ html(lang='ru')
             each category, index in categoryList
               li.category__list-item
                 form(action="#" method="POST")
-                  input(type="text" name=`category-${index + 1}` id=`modify-form-category-${index + 1}` value=category)
+                  input(type="text" name=`category-${index + 1}` id=`modify-form-category-${index + 1}` value=category.name)
                   label(for=`modify-form-category-${index + 1}`)
                     span.visually-hidden Редактировать категорию
                   button.category__button.button.button--category(type="submit") Сохранить

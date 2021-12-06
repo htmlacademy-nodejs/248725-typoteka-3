@@ -1,60 +1,47 @@
 'use strict';
 
-const {nanoid} = require(`nanoid`);
-const {ID_LENGTH} = require(`../constants`);
+const alias = require(`../models/alias`);
 
-class ArticlesService {
-  constructor(articles) {
-    this._articles = articles;
+class ArticleService {
+  constructor(sequelize) {
+    this._Article = sequelize.models.Article;
   }
 
-  create(article) {
-    const newArticle = Object
-      .assign({id: nanoid(ID_LENGTH), comments: []}, article);
-
-    this._articles.push(newArticle);
-    return newArticle;
+  async create(articleData) {
+    const offer = await this._Article.create(articleData);
+    await offer.addCategories(articleData.categories);
+    return offer.get();
   }
 
-
-  update(id, article) {
-    const oldArticle = this._articles
-      .find((item) => item.id === id);
-
-    if (!oldArticle) {
-      return null;
-    }
-
-    const newArticle = Object.assign(oldArticle, article);
-
-    this._articles = this._articles.map((item) => {
-      if (item.id !== id) {
-        return item;
-      }
-      return newArticle;
+  async update(id, article) {
+    const [affectedRows] = await this._Article.update(article, {
+      where: {id}
     });
-
-    return newArticle;
+    return !!affectedRows;
   }
 
-  drop(id) {
-    const article = this._articles.find((item) => item.id === id);
-
-    if (!article) {
-      return null;
-    }
-
-    this._articles = this._articles.filter((item) => item.id !== id);
-    return article;
-  }
-
-  findAll() {
-    return this._articles;
+  async drop(id) {
+    const deletedRows = await this._Offer.destroy({
+      where: {id}
+    });
+    return !!deletedRows;
   }
 
   findOne(id) {
-    return this._articles.find((item) => item.id === id);
+    return this._Article.findByPk(id, {include: [alias.CATEGORIES, alias.COMMENTS]});
+  }
+
+  async findAll(needComments) {
+    const include = [alias.CATEGORIES];
+
+    if (needComments) {
+      include.push(alias.COMMENTS);
+    }
+
+    const articles = await this._Article.findAll({include});
+
+    return articles.map((item) => item.get());
   }
 }
 
-module.exports = ArticlesService;
+module.exports = ArticleService;

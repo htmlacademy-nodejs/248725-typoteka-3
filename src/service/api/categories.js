@@ -14,7 +14,12 @@ module.exports = (app, service) => {
   });
 
   route.get(`/stats`, async (req, res) => {
-    const categoriesWithStats = await service.findAllWithStats();
+    const categoriesWithStats = await service.findWithCountNumber();
     res.status(StatusCodes.OK).json(categoriesWithStats);
+  });
+
+  route.get(`/:categoryId`, async (req, res) => {
+    const category = await service.findOne(req.params.categoryId);
+    res.status(StatusCodes.OK).json(category);
   });
 };

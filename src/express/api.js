@@ -27,8 +27,16 @@ class API {
     return this._load(`/articles/${id}/comments`);
   }
 
+  getLastComments(limit) {
+    return this._load(`/comments/last`, {params: {limit}});
+  }
+
   search(query) {
     return this._load(`/search`, {params: {query}});
+  }
+
+  getCategory(id) {
+    return this._load(`/categories/${id}`);
   }
 
   getCategories() {
