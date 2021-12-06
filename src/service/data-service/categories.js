@@ -1,25 +1,36 @@
 'use strict';
 
-class CategoriesService {
-  constructor(articles) {
-    const categoriesReducer = (acc, item) => {
-      item.category.forEach((category) => {
-        const numberOfUsage = acc[category] || 0;
-        acc[category] = numberOfUsage + 1;
-      });
-      return acc;
-    };
+const alias = require(`../models/alias`);
+const {Sequelize} = require(`sequelize`);
 
-    this._categories = articles.reduce(categoriesReducer, {});
+class CategoryService {
+  constructor(sequelize) {
+    this._Category = sequelize.models.Category;
   }
 
-  findAll() {
-    return Object.keys(this._categories);
+  async findOne(id) {
+    return this._Category.findByPk(id, {include: {
+      association: alias.ARTICLES,
+      include: [alias.CATEGORIES, alias.COMMENTS],
+    }});
   }
 
-  findAllWithStats() {
-    return this._categories;
+  async findAll() {
+    return await this._Category.findAll({raw: true});
+  }
+
+  async findWithCountNumber() {
+    return await this._Category.findAll({
+      attributes: [`name`, [Sequelize.fn(`COUNT`, Sequelize.col(`id`)), `number`]],
+      raw: true,
+      group: [`id`],
+      order: [[Sequelize.col(`number`), `DESC`]],
+      include: {
+        association: alias.ARTICLE_CATEGORIES,
+        attributes: [],
+      }
+    });
   }
 }
 
-module.exports = CategoriesService;
+module.exports = CategoryService;

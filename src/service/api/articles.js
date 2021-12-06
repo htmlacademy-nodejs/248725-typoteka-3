@@ -6,14 +6,14 @@ const {entityValidator, articleExist, commentExist} = require(`../middlewares`);
 
 const route = new Router();
 
-const ARTICLE_KEYS = [`category`, `fullText`, `announce`, `title`, `createdDate`];
+const ARTICLE_KEYS = [`category`, `fulltext`, `announce`, `title`, `createdAt`];
 const COMMENT_KEYS = [`text`];
 
 module.exports = (app, articlesService, commentsService) => {
   app.use(`/articles`, route);
 
   route.get(`/`, async (req, res) => {
-    const articles = await articlesService.findAll();
+    const articles = await articlesService.findAll(true);
     res.status(StatusCodes.OK).json(articles);
   });
 
@@ -40,8 +40,7 @@ module.exports = (app, articlesService, commentsService) => {
   });
 
   route.get(`/:articleId/comments`, articleExist(articlesService), async (req, res) => {
-    const {article} = res.locals;
-    const comments = await commentsService.findAll(article);
+    const comments = await commentsService.findAll(req.params.articleId);
     res.status(StatusCodes.OK).json(comments);
   });
 
